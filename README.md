@@ -1,6 +1,10 @@
 # retirementCalc_JSversion
 Version one of a retirement calculator web app
 
+<h1>Purpose</h1>
+<p>Build the retirement calculator I wish existed on line.</p>
+
+
 <p>Last updated July 2021</p>
 <h2>Future planed updates</h2>
 <ol>
