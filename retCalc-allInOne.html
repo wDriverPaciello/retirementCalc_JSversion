@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Retirement Calculator</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="mainStyles.css"> -->
+    <style>
+        body {
+        background-color: white;
+        color:black;
+        }
+
+        .page-container {
+        max-width:1200px;
+        min-width: 320px;
+        margin: 0 auto;
+        }
+
+        footer { 
+        margin-top: 1rem;
+        border-top: 2px solid #7c5295;
+        }
+
+        label {font-weight: bold;}
+
+        .form-label {
+        margin-bottom: 0;
+        }
+
+        .helpText {
+        color: #737380;
+        font-style: italic;
+        display: block;
+        }
+
+        .results { }
+        .separator-end { border-right: 5px solid #7c5295;}
+        .separator-bottom { border-bottom: 2px solid #7c5295;}
+
+        /** Bootstrap overrides */
+        .btn-link {color: #545454}
+
+        table {
+        caption-side: top;
+        }
+
+        caption {
+        color: black;
+        font-weight: bold;
+        }
+    </style>
+
+    <!-- JS -->
+    <script ></script>
+  </head>
+  <body onload="setDefault()">
+    <main class="page-container">
+      <h1>Retirement Calculator</h1>
+      <div class="row">
+        <div class="col-lg-3 separator-end">
+          <h2>Enter your information</h2>
+          <form>
+            <div class="row separator-bottom">
+              <div class="col-md-4 col-lg-12">
+                <div class="mb-3">
+                  <label for="currentAge" class="form-label">Current Age</label>
+                  <input id="currentAge" type="text" class="form-control" value="60">
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-12">
+                <div class="mb-3">
+                  <label for="currentIncome" class="form-label">Annual Income</label>
+                  <input id="currentIncome" type="text"  class="form-control" value="10000">
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-12">
+                <div class="mb-3 pb-4">
+                  <label for="currentSaved" class="form-label">Current Retirement Savings</label>
+                  <span id="descSaved" class="helpText">This includes IRA, Roth, 401k, 403b, ect. (Not your savings account)</span>
+                  <input id="currentSaved" type="text"  class="form-control" value="0" aria-describedby="descSaved">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 col-lg-12">
+                <div class="mb-3">
+                  <label for="savingsRate" class="form-label">Savings Rate</label>
+                  <span id="descSaveRate" class="helpText">Percent of your income</span>
+                  <input id="savingsRate" type="text"  class="form-control" value="5" aria-describedby="descSaveRate">
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-12">
+                <div class="mb-3">
+                  <label for="payIncrease" class="form-label">Estimated Pay Increase</label>
+                  <span id="descRaises" class="helpText">Averaged over your lifetime, normally between 1%-3%</span>
+                  <input id="payIncrease" type="text"  class="form-control" value="2" aria-describedby="descRaises">
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-12">
+                <div class="mb-3">
+                  <label for="aveInterest" class="form-label">Estimated Average Interest Rate</label>
+                  <input id="aveInterest" type="text"  class="form-control" value="7">
+                </div>
+              </div>
+            </div>
+            
+            <button type="button" class="btn btn-secondary mb-3" id="advOptionsBtn" aria-expanded="false" aria-controls="advOptions" onclick="showHide('advOptions', 'advOptionsBtn')">Advanced Options</button>
+            <div id="advOptions" class="card">
+              <div class="card-body">
+                <div class="mb-3">
+                  <label for="cust_retIncom" class="form-label">Custom Annual Retirement Income</label>
+                  <input id="cust_retIncom" type="text"  class="form-control" value="">
+                </div>
+                <div class="mb-3">
+                  <label for="cust_retBalance" class="form-label">Custom Retirement Balance</label>
+                  <input id="cust_retBalance" type="text"  class="form-control" value="">
+                </div>
+                <div class="mb-3">
+                  <label for="cust_inflation" class="form-label">Inflation Rate</label>
+                  <input id="cust_inflation" type="text"  class="form-control" value="3">
+                </div>
+                <div class="">
+                  <label for="cust_retInterestRate" class="form-label">Interest rate in retirement</label>
+                  <input id="cust_retInterestRate" type="text"  class="form-control" value="4">
+                </div>
+              </div>
+
+            </div>
+
+            <button type="button" class="btn btn-primary mt-3" onclick="submitBtn()">Check your time line</button>
+          </form>
+        </div>
+        <div class="col-lg-9">
+          <h2>Results</h2>
+          Using the information you  provided. This is what you finanicial future looks like.
+          <dl> 
+            <dt>Retirement income: 
+              <span id="retIncome" class="results"></span>
+            </dt>
+            <dd>
+              <button type="button" class="btn btn-link" id="retIncomeBtn" aria-expanded="true" aria-controls="retIncomeInfo" onclick="showHide('retIncomeInfo', 'retIncomeBtn')">Learn more</button>
+              <div id="retIncomeInfo">
+                <p>This number is the same as the net income you would be living off of while saving. (net income - retirement savings) So it is effectivly the net income you will have the year you retire.</p>
+              </div>
+            </dd>
+            <dt>Safe retirement balance: 
+              <span id="safeRetBal" class="results"></span>
+            </dt>
+            <dd>
+              <button type="button" class="btn btn-link" id="safeRetBalBtn" aria-expanded="true" aria-controls="safeRetBalInfo" onclick="showHide('safeRetBalInfo', 'safeRetBalBtn')">Learn more</button>
+              <div id="safeRetBalInfo">
+                <p>Simpily. This is (25 * Net Income at retirement)</p>
+                <p>Why though? First a few assumptions.</p>
+                <ol>
+                  <li>You will with draw 4% of the balance of your account each year after retirement.</li>
+                  <li>You will earn an average of 4% interest when you retire.</li>
+                  <li>There will be on average 3% inflation (high for US / Erope)</li>
+                  <li>You will not be receiving any supplimentary income after you retire (pention, social security, ect.).</li>
+                  <li>You want to live off of this money for the rest of your life.</li>
+                </ol>
+                <p>If these assumptions hold true, and the averages over the last 125 years also hold true, than with 25 times your net income saved you have a 97% chance of your money will last at least 50 years. In most cases it will likely last forever, but the historical data does not go far enough back to make more assertive claims.</p>
+              </div>
+            </dd>
+          </dl>
+
+          <table class="table table-hover table-sm">
+            <caption>Amortization  Table</caption>
+            <thead>
+              <tr>
+                <th scope="col">Year</th>
+                <th scope="col">Age</th>
+                <th scope="col">Income</th>
+                <th scope="col">Savings</th>
+              </tr>
+            </thead>
+            <tbody id="dataTable">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <p>Last updated July 2021</p>
+      <h2>Future planed updates</h2>
+      <ol>
+        <li><s>Display retIncome and safRetBal</s></li>
+        <li>Get advanced options working</li>
+        <li>Clean up CSS in SVP</li>
+        <li>Include formulas so users can do it themselves</li>
+        <li>Add resourses for further research</li>
+        <li>Include updating the table to see how promotions and job changes effect stuff.</li>
+      </ol>
+    </footer>
+
+    <!-- JS -->
+    <script>
+        /**Utility Functions */
+        function toPercent(num) {
+        var num = num / 100;
+        return num;
+        }
+
+        function round(num1, num2) {
+        var num3 = Number.parseFloat(num1).toFixed(num2);
+        return num3;
+        }
+
+        function toDollars(num) {
+        var num = "$" + round(num, 2);
+        return num;
+        }
+
+        function showHide(divID, btnID) {
+        var divStuff = document.getElementById(divID);
+        var buttonStuff = document.getElementById(btnID);
+
+        if (buttonStuff.getAttribute('aria-expanded') === 'true') {
+            buttonStuff.setAttribute('aria-expanded', false);
+            divStuff.style.display = "none";
+            } else {
+                buttonStuff.setAttribute('aria-expanded', true);
+            divStuff.style.display = "block";
+        }
+
+        }
+
+        /**Other */
+        function setDefault(){
+        // showHide('advOptions', 'advOptionsBtn');
+        showHide('retIncomeInfo', 'retIncomeBtn');
+        showHide('safeRetBalInfo', 'safeRetBalBtn');
+        submitBtn();
+        }
+
+        function deletePerviousSubmit(){
+        var table = document.getElementById("dataTable");
+        while(table.rows.length > 0) {
+            table.deleteRow(0);
+        }
+        }
+
+        function updateIncome(income, raise) {
+        var temp_pay_increase = (income * raise); //get this year's pay increase
+        income = income + temp_pay_increase; // add pay increase to pay
+        return income;
+        }
+
+        function updateSavings(income, savingsRate, currentBal, interestRate) {
+        var newSaved = income * savingsRate //get this year's amount saved
+        var temp_bal_increase = currentBal + newSaved; //get last year's bal + new money saved
+        savingsBal = temp_bal_increase + (temp_bal_increase * interestRate); //add this year's interest to balance
+        return savingsBal;
+        }
+
+        function buildTable(year, ageInput, income, savingsBal) {
+        /** Table var */
+        var table = document.getElementById("dataTable");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(-1);
+        var cell2 = row.insertCell(-1);
+        var cell3 = row.insertCell(-1);
+        var cell4 = row.insertCell(-1);
+
+        /**Output*/
+        cell1.innerHTML = year;
+        cell2.innerHTML = ageInput;
+        cell3.innerHTML = toDollars(income);
+        cell4.innerHTML = toDollars(savingsBal);
+        }
+
+        function submitBtn() {
+        deletePerviousSubmit();
+
+        /**Inputs*/
+        let ageInput = parseInt(document.getElementById("currentAge").value);
+        let incomeInput = parseInt(document.getElementById("currentIncome").value);
+        let savedInput = parseInt(document.getElementById("currentSaved").value);
+        let saveRateInput = toPercent(parseInt(document.getElementById("savingsRate").value));
+        let payIncreaseInput = toPercent(parseInt(document.getElementById("payIncrease").value));
+        let aveInterestInput = toPercent(parseInt(document.getElementById("aveInterest").value));
+
+        /**Logic*/
+        var year = 0;
+        var income = incomeInput;
+        var savingsBal = savedInput;
+
+        buildTable(year, ageInput, income, savingsBal);
+
+        for(ageInput = ageInput+1; ageInput<=65; ageInput++){
+
+            /**Incroment*/
+            income = updateIncome(income, payIncreaseInput);
+
+            savingsBal = updateSavings(income, saveRateInput, savingsBal, aveInterestInput);
+            
+            year = year + 1
+
+            buildTable(year, ageInput, income, savingsBal);
+        }
+
+        /**Display results */
+        document.getElementById("retIncome").innerHTML = toDollars(income - (income*saveRateInput));
+        document.getElementById("safeRetBal").innerHTML = toDollars(savingsBal);
+        }
+    </script>
+
+    <!-- <script src="mainJS.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  </body>
+</html>

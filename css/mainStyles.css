@@ -1,0 +1,44 @@
+body {
+  background-color: white;
+  color:black;
+  margin: 0 15px;
+}
+
+.page-container {
+  max-width:1200px;
+  min-width: 320px;
+  margin: 0 auto;
+}
+
+footer { 
+  margin-top: 1rem;
+  border-top: 2px solid #7c5295;
+}
+
+label {font-weight: bold;}
+
+.form-label {
+  margin-bottom: 0;
+}
+
+.helpText {
+  color: #737380;
+  font-style: italic;
+  display: block;
+}
+
+/* .results { } */
+.separator-end { border-right: 5px solid #7c5295;}
+.separator-bottom { border-bottom: 2px solid #7c5295;}
+
+/** Bootstrap overrides */
+.btn-link {color: #545454}
+
+table {
+  caption-side: top;
+}
+
+caption {
+  color: black;
+  font-weight: bold;
+}
